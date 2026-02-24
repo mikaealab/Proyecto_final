@@ -1,37 +1,32 @@
 package com.utc.sistema_tevcol.service;
 
+import org.springframework.stereotype.Service;
+import java.util.List;
 import com.utc.sistema_tevcol.entity.Catalogo;
 import com.utc.sistema_tevcol.repository.CatalogoRepository;
 
-import java.sql.Connection;
-import java.util.List;
-
+@Service
 public class CatalogoService {
 
-    private CatalogoRepository repo;
+    private final CatalogoRepository repository;
 
-    public CatalogoService(Connection con) {
-        this.repo = new CatalogoRepository(con);
+    public CatalogoService(CatalogoRepository repository) {
+        this.repository = repository;
     }
 
-    public void guardar(Catalogo c) throws Exception {
-
-        if(c.getTipoCat() == null || c.getTipoCat().isEmpty()) {
-            throw new Exception("El tipo no puede estar vacío");
-        }
-
-        repo.guardar(c);
+    public List<Catalogo> listar() {
+        return repository.findAll();
     }
 
-    public List<Catalogo> listar() throws Exception {
-        return repo.listar();
+    public Catalogo guardar(Catalogo c) {
+        return repository.save(c);
     }
 
-    public void actualizar(Catalogo c) throws Exception {
-        repo.actualizar(c);
+    public Catalogo buscarPorId(Long id) {
+        return repository.findById(id).orElse(null);
     }
 
-    public void eliminar(Long id) throws Exception {
-        repo.eliminar(id);
+    public void eliminar(Long id) {
+        repository.deleteById(id);
     }
 }
