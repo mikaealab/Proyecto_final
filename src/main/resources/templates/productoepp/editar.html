@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nuevo Producto EPP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4>Editar Producto EPP</h4>
+        </div>
+
+        <div class="card-body">
+            <form th:action="@{/productoepp/guardar}" th:object="${producto}" method="post">
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" th:field="*{nombrePepp}" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Código Producto</label>
+                        <input type="text" th:field="*{codigoProductoPepp}" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Marca</label>
+                        <input type="text" th:field="*{marcaPepp}" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Proveedor</label>
+                        <input type="text" th:field="*{proveedorPepp}" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Unidad</label>
+                        <input type="text" th:field="*{unidadPepp}" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Impuesto</label>
+                        <input type="number" th:field="*{impuestoPepp}" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipo Protección</label>
+                        <select th:field="*{tipoProteccionPepp}" class="form-select">
+                            <option th:each="c : ${catalogos}"
+                                    th:value="${c}"
+                                    th:text="${c.tipoCat}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipo</label>
+                        <select th:field="*{tipoPepp}" class="form-select">
+                            <option th:each="c : ${catalogos}"
+                                    th:value="${c}"
+                                    th:text="${c.tipoCat}">
+                            </option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <a th:href="@{/productoepp}" class="btn btn-secondary">Cancelar</a>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
