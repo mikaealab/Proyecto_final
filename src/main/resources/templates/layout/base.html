@@ -44,9 +44,9 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="cerrarSesion()">
-                            <i class="fa-solid fa-sign-out-alt me-1"></i> Salir
-                        </a>
+                        <a class="nav-link fw-bold" href="javascript:void(0)" onclick="cerrarSesion()">
+						    <i class="fa-solid fa-sign-out-alt me-1"></i> Salir
+						</a>
                     </li>
                 </ul>
             </div>
@@ -85,26 +85,25 @@
     <script>
  // Reemplaza tu función cerrarSesion por esta:
 	    function cerrarSesion() {
-	        Swal.fire({
-	            title: '¿Cerrar sesión?',
-	            text: "¿Estás seguro de que deseas salir?",
-	            icon: 'question',
-	            showCancelButton: true,
-	            confirmButtonColor: '#dc3545',
-	            cancelButtonColor: '#6c757d',
-	            confirmButtonText: 'Sí, salir',
-	            cancelButtonText: 'Cancelar'
-	        }).then((result) => {
-	            if (result.isConfirmed) {
-	                // Crear un formulario temporal para enviar el POST de logout
-	                const form = document.createElement('form');
-	                form.method = 'POST';
-	                form.action = '/logout';
-	                document.body.appendChild(form);
-	                form.submit();
-	            }
-	        });
-    	}
+		    Swal.fire({
+		        title: '¿Cerrar sesión?',
+		        text: "¿Estás seguro de que deseas salir?",
+		        icon: 'warning',
+		        showCancelButton: true,
+		        confirmButtonColor: '#ffc107',
+		        confirmButtonText: 'Sí, salir',
+		        cancelButtonText: 'Cancelar'
+		    }).then((result) => {
+		        if (result.isConfirmed) {
+		            // Esto crea el POST que Spring Security espera
+		            const form = document.createElement('form');
+		            form.method = 'POST';
+		            form.action = '/logout';
+		            document.body.appendChild(form);
+		            form.submit();
+		        }
+		    });
+		}
     </script>
 </body>
 </html>
