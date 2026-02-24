@@ -1,32 +1,34 @@
 package com.utc.sistema_tevcol.service;
 
-import org.springframework.stereotype.Service;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.utc.sistema_tevcol.entity.Catalogo;
 import com.utc.sistema_tevcol.repository.CatalogoRepository;
 
 @Service
 public class CatalogoService {
 
-    private final CatalogoRepository repository;
+    private final CatalogoRepository catalogoRepository;
 
-    public CatalogoService(CatalogoRepository repository) {
-        this.repository = repository;
+    public CatalogoService(CatalogoRepository catalogoRepository) {
+        this.catalogoRepository = catalogoRepository;
     }
 
     public List<Catalogo> listar() {
-        return repository.findAll();
+        return catalogoRepository.findAll();
     }
 
-    public Catalogo guardar(Catalogo c) {
-        return repository.save(c);
+    public void guardar(Catalogo catalogo) {
+        catalogoRepository.save(catalogo);
     }
 
     public Catalogo buscarPorId(Long id) {
-        return repository.findById(id).orElse(null);
+        return catalogoRepository.findById(id).orElse(null);
     }
 
     public void eliminar(Long id) {
-        repository.deleteById(id);
+        catalogoRepository.deleteById(id);
     }
 }

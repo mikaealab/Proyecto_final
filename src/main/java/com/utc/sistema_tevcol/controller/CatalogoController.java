@@ -3,6 +3,7 @@ package com.utc.sistema_tevcol.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.utc.sistema_tevcol.entity.Catalogo;
 import com.utc.sistema_tevcol.service.CatalogoService;
@@ -11,44 +12,57 @@ import com.utc.sistema_tevcol.service.CatalogoService;
 @RequestMapping("/catalogos")
 public class CatalogoController {
 
-    private final CatalogoService service;
+    private final CatalogoService catalogoService;
 
-    public CatalogoController(CatalogoService service) {
-        this.service = service;
+    public CatalogoController(CatalogoService catalogoService) {
+        this.catalogoService = catalogoService;
     }
 
     // LISTAR
     @GetMapping
     public String listar(Model model) {
-        model.addAttribute("catalogos", service.listar());
-        return "catalogo/listar";
+        model.addAttribute("catalogos", catalogoService.listar());
+        return "catalogo/listarcatalogo";
     }
 
-    // FORM NUEVO
+    // FORMULARIO NUEVO
     @GetMapping("/nuevo")
     public String nuevo(Model model) {
         model.addAttribute("catalogo", new Catalogo());
-        return "catalogo/formulario";
+        return "catalogo/nuevocatalogo";
     }
 
     // GUARDAR
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Catalogo catalogo) {
-        service.guardar(catalogo);
+    public String guardar(@ModelAttribute Catalogo catalogo,
+                          RedirectAttributes ra) {
+
+        if (catalogo.getCodigoCat() == null) {
+            ra.addFlashAttribute("mensaje", "Registro creado correctamente");
+        } else {
+            ra.addFlashAttribute("mensaje", "Registro actualizado correctamente");
+        }
+
+        catalogoService.guardar(catalogo);
         return "redirect:/catalogos";
     }
 
     // EDITAR
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
-        model.addAttribute("catalogo", service.buscarPorId(id));
-        return "catalogo/formulario";
+        model.addAttribute("catalogo",
+                catalogoService.buscarPorId(id));
+        return "catalogo/editarcatalogo";
     }
 
     // ELIMINAR
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Long id) {
-        service.eliminar(id);
+    public String eliminar(@PathVariable Long id,
+                           RedirectAttributes ra) {
+
+        catalogoService.eliminar(id);
+        ra.addFlashAttribute("mensaje", "Registro eliminado correctamente");
+
         return "redirect:/catalogos";
     }
 }
