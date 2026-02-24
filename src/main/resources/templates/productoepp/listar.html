@@ -1,55 +1,105 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Lista de Productos EPP</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Productos EPP</title>
 </head>
-<body class="container mt-5">
 
-    
-	<div class="d-flex justify-content-between align-items-center mb-4">
-	    <h2>Inventario de Productos EPP</h2>
-	    <div class="d-flex gap-2">
-	        <a th:href="@{/productoepp/nuevo}" class="btn btn-primary">Registrar Nuevo Producto</a>
-	        
-	        <form th:action="@{/logout}" method="post">
-	            <button type="submit" class="btn btn-outline-danger">Cerrar Sesión</button>
-	        </form>
-	    </div>
-	</div>    
+<body>
+<div layout:fragment="content">
 
-    <table class="table table-striped table-hover shadow-sm">
-        <thead class="table-dark">
-            <tr>
-                <th>Código</th>
-                <th>Nombre</th>
-                <th>Marca</th>
-                <th>Proveedor</th>
-                <th>Tipo Protección</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="p : ${productos}">
-                <td th:text="${p.codigoProductoPepp}"></td>
-                <td th:text="${p.nombrePepp}"></td>
-                <td th:text="${p.marcaPepp}"></td>
-                <td th:text="${p.proveedorPepp}"></td>
-                <td th:text="${p.tipoProteccion != null ? p.tipoProteccion.descripcionCat : 'Sin asignar'}"></td>
-                <td>
-				    <a th:href="@{/productoepp/editar/{id}(id=${p.codigoPeep})}" class="btn btn-warning btn-sm">Editar</a>
-				    <a th:href="@{/productoepp/eliminar/{id}(id=${p.codigoPeep})}" 
-				       class="btn btn-danger btn-sm" 
-				       onclick="return confirm('¿Está seguro de eliminar este producto?')">Eliminar</a>
-				</td>
-                <td>
-                    <button class="btn btn-sm btn-info">Detalles</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- ENCABEZADO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-semibold">
+            <i class="fa-solid fa-box text-primary"></i> Productos EPP
+        </h2>
+        <a th:href="@{/productoepp/nuevo}" class="btn btn-success">
+            <i class="fa-solid fa-plus"></i> Nuevo Producto
+        </a>
+    </div>
 
+    <!-- TABLA -->
+    <div class="card shadow-sm">
+        <div class="card-body table-responsive">
+            <table class="table table-striped table-hover align-middle text-center"
+                   id="tablaProductos" style="width:100%">
+                <thead class="table-primary">
+                <tr>
+                    <th style="width:5%">ID</th>
+                    <th style="width:30%">Nombre</th>
+                    <th style="width:10%">Impuesto</th>
+                    <th style="width:15%">Tipo</th>
+                    <th style="width:15%">Protección</th>
+                    <th style="width:10%">Estado</th>
+                    <th style="width:15%">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${productos}">
+                    <td th:text="${p.codigoPeep}"></td>
+                    <td th:text="${p.nombrePepp}" class="text-start"></td>
+                    <td th:text="${p.impuestoPepp}"></td>
+                    <td th:text="${p.tipo != null ? p.tipo.descripcionCat : '-'}"></td>
+                    <td th:text="${p.tipoProteccion != null ? p.tipoProteccion.descripcionCat : '-'}"></td>
+                    <td>
+                        <span th:if="${!p.deshabilitarPepp}" class="badge bg-success">ACTIVO</span>
+                        <span th:if="${p.deshabilitarPepp}" class="badge bg-danger">INACTIVO</span>
+                    </td>
+                    <td>
+                        <a th:href="@{/productoepp/editar/{id}(id=${p.codigoPeep})}"
+                           class="btn btn-warning btn-sm">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <button class="btn btn-danger btn-sm"
+                                onclick="confirmarEliminar([[${p.codigoPeep}]])">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- SWEETALERT MENSAJES -->
+    <script th:if="${swal_title}">
+        Swal.fire({
+            icon: '[[${swal_icon}]]',
+            title: '[[${swal_title}]]',
+            text: '[[${swal_text}]]',
+            confirmButtonColor: '#0d6efd'
+        });
+    </script>
+
+    <!-- SCRIPTS -->
+    <script>
+        $(document).ready(function () {
+            $('#tablaProductos').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
+                }
+            });
+        });
+
+        function confirmarEliminar(id) {
+            Swal.fire({
+                title: '¿Eliminar producto?',
+                text: 'Esta acción no se puede deshacer',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Sí, eliminar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/productoepp/eliminar/' + id;
+                }
+            });
+        }
+    </script>
+
+</div>
 </body>
 </html>

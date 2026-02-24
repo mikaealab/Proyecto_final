@@ -1,92 +1,114 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="layout/layout :: head('Lista de Catálogos')">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
 
-<div th:replace="layout/layout :: contenido(~{::body})">
+<head>
+    <title>Catálogos</title>
+</head>
 
+<body>
+<div layout:fragment="content">
+
+    <!-- ENCABEZADO -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="text-primary fw-bold mb-0">
-            <i class="fa-solid fa-layer-group"></i> Gestión de Catálogos
-        </h3>
-
+        <h2 class="fw-semibold">
+            <i class="fa-solid fa-list text-primary"></i> Catálogos
+        </h2>
         <a th:href="@{/catalogos/nuevo}" class="btn btn-success">
             <i class="fa-solid fa-plus"></i> Nuevo Catálogo
         </a>
     </div>
 
-    <!-- Mensaje flash -->
-    <div th:if="${mensaje}" 
-         class="alert alert-success alert-dismissible fade show" 
-         role="alert">
-        <span th:text="${mensaje}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <!-- TABLA -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped" id="tablaCatalogos">
+                    <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cat : ${catalogos}">
+                        <td th:text="${cat.codigoCat}"></td>
+                        <td th:text="${cat.tipoCat}"></td>
+                        <td th:text="${cat.descripcionCat}"></td>
+                        <td>
+                            <span th:if="${cat.estadoCat == 1}" class="badge bg-success">
+                                <i class="fa-solid fa-check"></i> ACTIVO
+                            </span>
+                            <span th:if="${cat.estadoCat == 0}" class="badge bg-danger">
+                                <i class="fa-solid fa-ban"></i> INACTIVO
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <a th:href="@{/catalogos/editar/{id}(id=${cat.codigoCat})}"
+                               class="btn btn-warning btn-sm me-1">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+
+                            <button type="button"
+							        class="btn btn-danger btn-sm btn-eliminar"
+							        th:data-id="${cat.codigoCat}">
+							    <i class="fa-solid fa-trash"></i>
+							</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <div class="table-responsive">
-        <table id="tablaCatalogo" class="table table-bordered table-hover align-middle">
-            <thead class="table-dark text-center">
-                <tr>
-                    <th>Código</th>
-                    <th>Tipo</th>
-                    <th>Descripción</th>
-                    <th>Estado</th>
-                    <th width="160px">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="c : ${catalogos}">
-                    <td th:text="${c.codigoCat}" class="text-center"></td>
-                    <td th:text="${c.tipoCat}"></td>
-                    <td th:text="${c.descripcionCat}"></td>
-                    <td class="text-center">
-                        <span th:text="${c.estadoCat}"
-                              th:classappend="${c.estadoCat == 'Activo'} ? 'badge bg-success px-3 py-2' 
-                                               : 'badge bg-danger px-3 py-2'">
-                        </span>
-                    </td>
-                    <td class="text-center">
-                        <a th:href="@{/catalogos/editar/{id}(id=${c.codigoCat})}"
-                           class="btn btn-warning btn-sm me-1">
-                            <i class="fa-solid fa-pen"></i>
-                        </a>
+    <!-- SWEETALERT GUARDAR / EDITAR -->
+    <script th:if="${swal_title}">
+    Swal.fire({
+        icon: '[[${swal_icon}]]',
+        title: '[[${swal_title}]]',
+        text: '[[${swal_text}]]',
+        confirmButtonColor: '#0d6efd'
+    });
+</script>
 
-                        <button type="button"
-                                class="btn btn-danger btn-sm"
-                                th:onclick="'confirmarEliminacion(' + ${c.codigoCat} + ')'">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- DataTables -->
-    <script>
-        $(document).ready(function () {
-            $('#tablaCatalogo').DataTable({
-                language: {
-                    url: "//cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json"
-                }
-            });
-        });
-
-        function confirmarEliminacion(id) {
-            Swal.fire({
-                title: '¿Eliminar registro?',
-                text: "No podrás revertir esta acción",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Sí, eliminar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '/catalogos/eliminar/' + id;
-                }
-            });
-        }
-    </script>
+    <!-- DATATABLE + ELIMINAR -->
+   <script>
+	$(document).ready(function () {
+	
+	    $('#tablaCatalogos').DataTable({
+	        language: {
+	            url: '//cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
+	        }
+	    });
+	
+	    // BOTÓN ELIMINAR
+	    $('.btn-eliminar').on('click', function () {
+	        let id = $(this).data('id');
+	
+	        Swal.fire({
+	            title: '¿Eliminar catálogo?',
+	            text: 'Esta acción no se puede deshacer',
+	            icon: 'warning',
+	            showCancelButton: true,
+	            confirmButtonColor: '#dc3545',
+	            cancelButtonColor: '#6c757d',
+	            confirmButtonText: 'Sí, eliminar',
+	            cancelButtonText: 'Cancelar'
+	        }).then((result) => {
+	            if (result.isConfirmed) {
+	                window.location.href = '/catalogos/eliminar/' + id;
+	            }
+	        });
+	    });
+	
+	});
+	</script>
 
 </div>
+</body>
 </html>

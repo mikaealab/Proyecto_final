@@ -14,8 +14,7 @@ public class ProductoEpp {
     private Long codigoPeep;
 
     @NotBlank(message = "El nombre es obligatorio")
-    @Size(max = 1000)
-    @Column(name = "nombre_pepp", length = 1000)
+    @Column(name = "nombre_pepp", length = 1000, nullable = false)
     private String nombrePepp;
 
     @Column(name = "codigo_producto_pepp", length = 250)
@@ -36,22 +35,20 @@ public class ProductoEpp {
     @Column(name = "unidad_pepp", length = 100)
     private String unidadPepp;
 
-    @NotNull(message = "El impuesto no puede ser nulo")
+    @NotNull(message = "El impuesto es obligatorio")
     @Min(value = 0, message = "El impuesto debe ser mayor o igual a 0")
-    @Column(name = "impuesto_pepp")
+    @Column(name = "impuesto_pepp", nullable = false)
     private Long impuestoPepp;
 
-    @Column(name = "deshabilitar_pepp")
+    @Column(name = "deshabilitar_pepp", nullable = false)
     private Boolean deshabilitarPepp = false;
 
-    // Campos de Auditoría (según tu diagrama)
     @Column(name = "creacion_pepp", updatable = false)
     private LocalDateTime creacionPepp;
 
     @Column(name = "actualizacion_pepp")
     private LocalDateTime actualizacionPepp;
 
-    // 🔹 RELACIONES corregidas
     @ManyToOne
     @JoinColumn(name = "tipo_proteccion_pepp")
     private Catalogo tipoProteccion;
@@ -60,7 +57,6 @@ public class ProductoEpp {
     @JoinColumn(name = "tipo_pepp")
     private Catalogo tipo;
 
-    // Bloque para asignar fechas automáticamente (Disponibilidad/Trazabilidad)
     @PrePersist
     protected void onCreate() {
         creacionPepp = LocalDateTime.now();
@@ -108,7 +104,4 @@ public class ProductoEpp {
 
     public Catalogo getTipo() { return tipo; }
     public void setTipo(Catalogo tipo) { this.tipo = tipo; }
-
-    public LocalDateTime getCreacionPepp() { return creacionPepp; }
-    public LocalDateTime getActualizacionPepp() { return actualizacionPepp; }
 }

@@ -1,105 +1,79 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Nuevo Producto EPP - TEVCOL</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-    	.error-message { 
-        	color: #dc3545; 
-        	font-size: 0.875em; 
-        	margin-top: 0.25rem; 
-    	}
-	</style>
+    <title>Nuevo Producto EPP</title>
 </head>
-<body class="container mt-5">
 
-    <div class="card shadow border-0">
-        <div class="card-header bg-primary text-white py-3">
-            <h3 class="mb-0"><i class="bi bi-plus-circle"></i> Registro de Producto EPP</h3>
-        </div>
-        <div class="card-body p-4">
-            <form th:action="@{/productoepp/guardar}" th:object="${producto}" method="post">
-                
-                <h5 class="text-secondary border-bottom pb-2 mb-3">Información General</h5>
+<body>
+<div layout:fragment="content">
+
+    <div class="card shadow-sm col-lg-8 mx-auto">
+        <div class="card-body">
+
+            <h4 class="mb-4 text-center">
+                <i class="fa-solid fa-box"></i> Nuevo Producto EPP
+            </h4>
+
+            <form th:action="@{/productoepp/guardar}"
+                  th:object="${producto}" method="post">
+
                 <div class="row">
+
                     <div class="col-md-8 mb-3">
-                        <label class="form-label fw-bold">Nombre del Producto</label>
-                        <input type="text" th:field="*{nombrePepp}" class="form-control" th:errorclass="is-invalid" placeholder="Nombre completo del equipo">
-                        <div class="error-message" th:if="${#fields.hasErrors('nombrePepp')}" th:errors="*{nombrePepp}"></div>
+                        <label class="form-label">Nombre *</label>
+                        <input type="text" th:field="*{nombrePepp}" class="form-control">
+                        <small class="text-danger" th:errors="*{nombrePepp}"></small>
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label fw-bold">Código de Producto</label>
-                        <input type="text" th:field="*{codigoProductoPepp}" class="form-control" placeholder="Ej: EPP-2026-001">
-                    </div>
-                </div>
 
-                <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label class="form-label fw-bold">Marca</label>
-                        <input type="text" th:field="*{marcaPepp}" class="form-control">
+                        <label class="form-label">Impuesto *</label>
+                        <input type="number" th:field="*{impuestoPepp}" class="form-control">
+                        <small class="text-danger" th:errors="*{impuestoPepp}"></small>
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label fw-bold">Proveedor</label>
-                        <input type="text" th:field="*{proveedorPepp}" class="form-control">
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label fw-bold">Unidad de Medida</label>
-                        <input type="text" th:field="*{unidadPepp}" class="form-control" placeholder="Pares, Unid, etc.">
-                    </div>
-                </div>
 
-                <h5 class="text-secondary border-bottom pb-2 mt-3 mb-3">Especificaciones y Cumplimiento</h5>
-                <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Tiempo de Reposición Sugerido</label>
-                        <input type="text" th:field="*{tiempoReposicionPepp}" class="form-control" placeholder="Ej: Cada 6 meses">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Norma Técnica Aplicable</label>
-                        <input type="text" th:field="*{normaTecnicaPepp}" class="form-control" placeholder="Ej: ANSI Z87.1 / EN 166">
-                    </div>
-                </div>
-
-                <h5 class="text-secondary border-bottom pb-2 mt-3 mb-3">Clasificación y Finanzas</h5>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Tipo de Protección</label>
-                        <select th:field="*{tipoProteccion}" class="form-select">
-                            <option value="">-- Seleccionar Protección --</option>
-                            <option th:each="cat : ${catalogos}" th:value="${cat.codigoCat}" th:text="${cat.descripcionCat}"></option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Categoría General</label>
+                        <label>Tipo</label>
                         <select th:field="*{tipo}" class="form-select">
-                            <option value="">-- Seleccionar Categoría --</option>
-                            <option th:each="cat : ${catalogos}" th:value="${cat.codigoCat}" th:text="${cat.descripcionCat}"></option>
+                            <option value="">-- Seleccione --</option>
+                            <option th:each="c : ${catalogos}"
+                                    th:value="${c.codigoCat}"
+                                    th:text="${c.descripcionCat}">
+                            </option>
                         </select>
                     </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Tipo Protección</label>
+                        <select th:field="*{tipoProteccion}" class="form-select">
+                            <option value="">-- Seleccione --</option>
+                            <option th:each="c : ${catalogos}"
+                                    th:value="${c.codigoCat}"
+                                    th:text="${c.descripcionCat}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-12 form-check mt-2">
+                        <input type="checkbox" th:field="*{deshabilitarPepp}" class="form-check-input">
+                        <label class="form-check-label">Deshabilitado</label>
+                    </div>
+
                 </div>
 
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label fw-bold">Impuesto (%)</label>
-                        <input type="number" th:field="*{impuestoPepp}" class="form-control" th:errorclass="is-invalid">
-                        <div class="error-message" th:if="${#fields.hasErrors('impuestoPepp')}" th:errors="*{impuestoPepp}"></div>
-                    </div>
-                    <div class="col-md-4 mb-3 d-flex align-items-end">
-                        <div class="form-check form-switch mb-2">
-                            <input class="form-check-input" type="checkbox" th:field="*{deshabilitarPepp}" id="checkDesh">
-                            <label class="form-check-label fw-bold" for="checkDesh">Deshabilitar Producto</label>
-                        </div>
-                    </div>
+                <div class="mt-4 text-end">
+                    <button class="btn btn-success">
+                        <i class="fa-solid fa-floppy-disk"></i> Guardar
+                    </button>
+                    <a th:href="@{/productoepp}" class="btn btn-secondary">Cancelar</a>
                 </div>
 
-                <div class="card-footer bg-light mt-4 d-flex justify-content-end gap-2">
-                    <a th:href="@{/productoepp}" class="btn btn-outline-secondary px-4">Cancelar</a>
-                    <button type="submit" class="btn btn-success px-5 shadow-sm">Guardar Producto</button>
-                </div>
             </form>
         </div>
     </div>
 
+</div>
 </body>
 </html>
