@@ -22,14 +22,14 @@ public class CatalogoController {
     @GetMapping
     public String listar(Model model) {
         model.addAttribute("catalogos", catalogoService.listar());
-        return "catalogo/listarcatalogo";
+        return "catalogos/listarcatalogo";
     }
 
     // FORMULARIO NUEVO
     @GetMapping("/nuevo")
     public String nuevo(Model model) {
         model.addAttribute("catalogo", new Catalogo());
-        return "catalogo/nuevocatalogo";
+        return "catalogos/nuevocatalogo";
     }
 
     // GUARDAR
@@ -52,7 +52,7 @@ public class CatalogoController {
     public String editar(@PathVariable Long id, Model model) {
         model.addAttribute("catalogo",
                 catalogoService.buscarPorId(id));
-        return "catalogo/editarcatalogo";
+        return "catalogos/editarcatalogo";
     }
 
     // ELIMINAR

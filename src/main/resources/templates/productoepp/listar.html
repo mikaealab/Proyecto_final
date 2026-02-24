@@ -1,57 +1,48 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Listado Producto EPP</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Lista de Productos EPP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body class="container mt-5">
 
-<div class="container mt-5">
-    <div class="card shadow">
-        <div class="card-header bg-dark text-white d-flex justify-content-between">
-            <h4>Listado Producto EPP</h4>
-            <a th:href="@{/productoepp/nuevo}" class="btn btn-success btn-sm">Nuevo</a>
-        </div>
-
-        <div class="card-body">
-            <table class="table table-bordered table-hover table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Marca</th>
-                        <th>Proveedor</th>
-                        <th>Unidad</th>
-                        <th>Tipo Protección</th>
-                        <th>Tipo</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="p : ${productos}">
-                        <td th:text="${p.codigoPeep}"></td>
-                        <td th:text="${p.nombrePepp}"></td>
-                        <td th:text="${p.marcaPepp}"></td>
-                        <td th:text="${p.proveedorPepp}"></td>
-                        <td th:text="${p.unidadPepp}"></td>
-                        <td th:text="${p.tipoProteccionPepp.tipoCat}"></td>
-                        <td th:text="${p.tipoPepp.tipoCat}"></td>
-                        <td>
-                            <a th:href="@{/productoepp/editar/{id}(id=${p.codigoPeep})}"
-                               class="btn btn-warning btn-sm">Editar</a>
-
-                            <a th:href="@{/productoepp/eliminar/{id}(id=${p.codigoPeep})}"
-                               class="btn btn-danger btn-sm"
-                               onclick="return confirm('¿Eliminar registro?')">
-                               Eliminar
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Inventario de Productos EPP</h2>
+        <a th:href="@{/productoepp/nuevo}" class="btn btn-primary">Registrar Nuevo Producto</a>
     </div>
-</div>
+
+    <table class="table table-striped table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Marca</th>
+                <th>Proveedor</th>
+                <th>Tipo Protección</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${productos}">
+                <td th:text="${p.codigoProductoPepp}"></td>
+                <td th:text="${p.nombrePepp}"></td>
+                <td th:text="${p.marcaPepp}"></td>
+                <td th:text="${p.proveedorPepp}"></td>
+                <td th:text="${p.tipoProteccion != null ? p.tipoProteccion.descripcionCat : 'Sin asignar'}"></td>
+                <td>
+				    <a th:href="@{/productoepp/editar/{id}(id=${p.codigoPeep})}" class="btn btn-warning btn-sm">Editar</a>
+				    <a th:href="@{/productoepp/eliminar/{id}(id=${p.codigoPeep})}" 
+				       class="btn btn-danger btn-sm" 
+				       onclick="return confirm('¿Está seguro de eliminar este producto?')">Eliminar</a>
+				</td>
+                <td>
+                    <button class="btn btn-sm btn-info">Detalles</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
 </body>
 </html>

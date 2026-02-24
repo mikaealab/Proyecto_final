@@ -31,4 +31,5 @@ public class CatalogoService {
     public void eliminar(Long id) {
         catalogoRepository.deleteById(id);
     }
+    
 }

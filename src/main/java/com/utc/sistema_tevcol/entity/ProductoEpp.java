@@ -24,45 +24,103 @@ public class ProductoEpp {
     @Column(name = "proveedor_pepp")
     private String proveedorPepp;
 
-    @Column(name = "tiempo_reposicion_pepp")
-    private String tiempoReposicionPepp;
-
-    @Column(name = "norma_tecnica_pepp")
-    private String normaTecnicaPepp;
-
     @Column(name = "unidad_pepp")
     private String unidadPepp;
-
-    @Column(name = "imagen_archivo_pepp")
-    private String imagenArchivoPepp;
-
-    @Column(name = "archivo_norma_tecnica_pepp")
-    private String archivoNormaTecnicaPepp;
-
-    @Column(name = "creacion_pepp")
-    private LocalDateTime creacionPepp;
-
-    @Column(name = "actualizacion_pepp")
-    private LocalDateTime actualizacionPepp;
 
     @Column(name = "impuesto_pepp")
     private Long impuestoPepp;
 
     @Column(name = "deshabilitar_pepp")
-    private Boolean deshabilitarPepp;
+    private Boolean deshabilitarPepp = false;
 
-    // 🔹 RELACIÓN 1
+    // 🔹 RELACIONES (FK a catalogo)
     @ManyToOne
     @JoinColumn(name = "tipo_proteccion_pepp")
     private Catalogo tipoProteccion;
 
-    // 🔹 RELACIÓN 2
     @ManyToOne
     @JoinColumn(name = "tipo_pepp")
     private Catalogo tipo;
 
-    public ProductoEpp() {
+    // ===== GETTERS & SETTERS =====
+
+    public Long getCodigoPeep() {
+        return codigoPeep;
     }
 
-    // Getters y Setters
+    public void setCodigoPeep(Long codigoPeep) {
+        this.codigoPeep = codigoPeep;
+    }
+
+    public String getNombrePepp() {
+        return nombrePepp;
+    }
+
+    public void setNombrePepp(String nombrePepp) {
+        this.nombrePepp = nombrePepp;
+    }
+
+    public String getCodigoProductoPepp() {
+        return codigoProductoPepp;
+    }
+
+    public void setCodigoProductoPepp(String codigoProductoPepp) {
+        this.codigoProductoPepp = codigoProductoPepp;
+    }
+
+    public String getMarcaPepp() {
+        return marcaPepp;
+    }
+
+    public void setMarcaPepp(String marcaPepp) {
+        this.marcaPepp = marcaPepp;
+    }
+
+    public String getProveedorPepp() {
+        return proveedorPepp;
+    }
+
+    public void setProveedorPepp(String proveedorPepp) {
+        this.proveedorPepp = proveedorPepp;
+    }
+
+    public String getUnidadPepp() {
+        return unidadPepp;
+    }
+
+    public void setUnidadPepp(String unidadPepp) {
+        this.unidadPepp = unidadPepp;
+    }
+
+    public Long getImpuestoPepp() {
+        return impuestoPepp;
+    }
+
+    public void setImpuestoPepp(Long impuestoPepp) {
+        this.impuestoPepp = impuestoPepp;
+    }
+
+    public Boolean getDeshabilitarPepp() {
+        return deshabilitarPepp;
+    }
+
+    public void setDeshabilitarPepp(Boolean deshabilitarPepp) {
+        this.deshabilitarPepp = deshabilitarPepp;
+    }
+
+    public Catalogo getTipoProteccion() {
+        return tipoProteccion;
+    }
+
+    public void setTipoProteccion(Catalogo tipoProteccion) {
+        this.tipoProteccion = tipoProteccion;
+    }
+
+    public Catalogo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Catalogo tipo) {
+        this.tipo = tipo;
+    }
 }

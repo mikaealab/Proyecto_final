@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Catálogo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+
+    <div class="card border-warning">
+        <div class="card-header bg-warning">
+            <h3>Editar Catálogo</h3>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/catalogos/guardar}" th:object="${catalogo}" method="post">
+                <input type="hidden" th:field="*{codigoCat}">
+
+                <div class="mb-3">
+                    <label class="form-label">Tipo:</label>
+                    <input type="text" th:field="*{tipoCat}" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Descripción:</label>
+                    <input type="text" th:field="*{descripcionCat}" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Estado:</label>
+                    <select th:field="*{estadoCat}" class="form-select">
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Actualizar Cambios</button>
+                <a th:href="@{/catalogos}" class="btn btn-secondary">Volver</a>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
