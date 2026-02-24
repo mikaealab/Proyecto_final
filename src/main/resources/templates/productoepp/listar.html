@@ -7,10 +7,17 @@
 </head>
 <body class="container mt-5">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Inventario de Productos EPP</h2>
-        <a th:href="@{/productoepp/nuevo}" class="btn btn-primary">Registrar Nuevo Producto</a>
-    </div>
+    
+	<div class="d-flex justify-content-between align-items-center mb-4">
+	    <h2>Inventario de Productos EPP</h2>
+	    <div class="d-flex gap-2">
+	        <a th:href="@{/productoepp/nuevo}" class="btn btn-primary">Registrar Nuevo Producto</a>
+	        
+	        <form th:action="@{/logout}" method="post">
+	            <button type="submit" class="btn btn-outline-danger">Cerrar Sesión</button>
+	        </form>
+	    </div>
+	</div>    
 
     <table class="table table-striped table-hover shadow-sm">
         <thead class="table-dark">
